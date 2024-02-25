@@ -4,15 +4,19 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	process "github.com/Stefasaurus/llmsger/processing"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var CsvPath string
+var OutputPath string
 var cfgFile string
+var bMergeFiles bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -23,11 +27,29 @@ var rootCmd = &cobra.Command{
 	or multiple unmerged localization files for a programming language 
 	(currently only supports C header generation)`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Called cmd root!")
 
-		fmt.Println("Path selected:", CsvPath)
+		var err error
 
-		return nil
+		defer func() {
+			if err != nil {
+				err = fmt.Errorf("llmsger failed: %w", err)
+			}
+		}()
+
+		if CsvPath == "" {
+			err = errors.New("path unspecified")
+		} else {
+			fmt.Println("Processing CSV...")
+
+			//Process the CSV
+			var langMap map[string][]string
+			langMap, err = process.Csv(CsvPath)
+
+			_, err = process.CreateFiles(langMap, OutputPath)
+
+		}
+
+		return err
 	},
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -50,11 +72,15 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.Flags().StringVar(&CsvPath, "f", "", "input CSV file path")
+	rootCmd.Flags().StringVarP(&CsvPath, "filepath", "f", "", "Input CSV file path")
+
+	rootCmd.PersistentFlags().StringVarP(&OutputPath, "outdir", "o", ".", "Output file(s) path (optional)")
+
+	rootCmd.Flags().BoolVarP(&bMergeFiles, "split", "S", false, "Output files will be split into each language option parsed from CSV")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
