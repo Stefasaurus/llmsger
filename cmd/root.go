@@ -15,8 +15,11 @@ import (
 
 var CsvPath string
 var OutputPath string
+var MergeName string
 var cfgFile string
 var bMergeFiles bool
+
+const mergeNameDefault string = "lang_merged"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -25,7 +28,7 @@ var rootCmd = &cobra.Command{
 	Long: `llmsger CLI tool for automatic language localization file creation.
 	It uses a provided CSV(.csv) file written by the user, to generate one merged 
 	or multiple unmerged localization files for a programming language 
-	(currently only supports C header generation)`,
+	(currently only supports C file generation)`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var err error
@@ -39,13 +42,28 @@ var rootCmd = &cobra.Command{
 		if CsvPath == "" {
 			err = errors.New("path unspecified")
 		} else {
+
+			if cmd.Flags().Changed("mergename") && !bMergeFiles {
+				err = fmt.Errorf("merged name cannot be used without the merge flasg (mrg)")
+				return err
+			}
+
 			fmt.Println("Processing CSV...")
 
 			//Process the CSV
 			var langMap map[string][]string
 			langMap, err = process.Csv(CsvPath)
+			if err != nil {
+				return err
+			}
 
-			_, err = process.CreateFiles(langMap, OutputPath)
+			if bMergeFiles {
+				fmt.Println("Processing merged files...")
+				//return nil
+				err = process.CreateFilesMerge(langMap, OutputPath, MergeName)
+			} else {
+				err = process.CreateFiles(langMap, OutputPath)
+			}
 
 		}
 
@@ -76,8 +94,9 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&OutputPath, "outdir", "o", ".", "Output file(s) path (optional)")
 
-	rootCmd.Flags().BoolVarP(&bMergeFiles, "split", "S", false, "Output files will be split into each language option parsed from CSV")
+	rootCmd.Flags().StringVarP(&MergeName, "mergename", "n", mergeNameDefault, "Output file(s) path (optional)")
 
+	rootCmd.Flags().BoolVar(&bMergeFiles, "mrg", false, "Output files will be merged into one file, by default the name is \"lang_merged\"")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
