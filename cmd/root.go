@@ -25,10 +25,17 @@ const mergeNameDefault string = "lang_merged"
 var rootCmd = &cobra.Command{
 	Use:   "llmsger",
 	Short: "llmsger is a tool for localization file generation.",
-	Long: `llmsger CLI tool for automatic language localization file creation.
+	Long: `
+	llmsger CLI tool for automatic language localization file creation.
 	It uses a provided CSV(.csv) file written by the user, to generate one merged 
 	or multiple unmerged localization files for a programming language 
 	(currently only supports C file generation)`,
+	Example: `
+Process a file so that only one language option can be active:
+	.\llmsger.exe -f "sample3.csv" --mrg -n "stef"
+Process a file so that all language option can be active:
+	.\llmsger.exe dyngen -f "sample.csv" --basename "example" --varname "exampleVarname"`,
+	Version: `0.2.0`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var err error
@@ -90,7 +97,8 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.Flags().StringVarP(&CsvPath, "filepath", "f", "", "Input CSV file path")
+	rootCmd.PersistentFlags().StringVarP(&CsvPath, "filepath", "f", "", "Input CSV file path")
+	rootCmd.MarkPersistentFlagRequired("filepath")
 
 	rootCmd.PersistentFlags().StringVarP(&OutputPath, "outdir", "o", ".", "Output file(s) path (optional)")
 

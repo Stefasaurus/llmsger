@@ -16,5 +16,5 @@ func main() {
 	cmd.Execute()
 
 	elapsed := time.Since(start)
-	log.Printf("Program took %s", elapsed)
+	log.Printf("llmsger took %s", elapsed)
 }
