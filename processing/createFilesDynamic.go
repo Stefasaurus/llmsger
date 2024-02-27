@@ -57,20 +57,19 @@ lang assignments,
 const dynamicSrcText = `
 #include "%s"
 
-#define _%s_C_LLMSGER // Guard from extern in header file
+#define _%s_C_LLMSGER_ // Guard from extern in header file
 
-#define %s %s_LLMSGR
+%s
 
 char* %s[MAX_LANG_OPT][MAX_VAR_OPT] =
 {
-	%s
+%s
 };
 
 /*
 enum lang value,
 lang values
 */`
-const langAssignTemplate = `[%s] = %s_LLMSGR,`
 
 // Struct containing all required parse information for templates
 
@@ -176,71 +175,15 @@ func CreateFilesDynamic(langMap map[string][]string, outDir string, varname stri
 	}
 	// First create the header file
 	err = createHeader(langMap, ptemplateInfo)
-	/*
-		for k, v := range langMap {
-			if k == "var" {
-				continue
-			}
+	err = createSrc(langMap, ptemplateInfo)
 
-			f, err := os.Create(newFilepath)
-			if err != nil {
-				return err
-			}
-
-			defer f.Close()
-
-			headguardStr := (strings.ToUpper(strings.TrimSpace(k) + "_LANG_H"))
-
-			writeStr := fmt.Sprintf(startText, newFilename, headguardStr, headguardStr)
-
-			_, err = f.WriteString(writeStr)
-			if err != nil {
-				return err
-			}
-
-			// Actual localizations written here
-
-			for i := 0; i < len(varNames); i++ {
-				varNames[i] = strings.TrimSpace(varNames[i])
-				varNames[i] = strings.ReplaceAll(varNames[i], " ", "_")
-				varNames[i] = strings.ToUpper(varNames[i])
-				if varNames[i] == "" {
-					continue
-				}
-
-				if len(v) == i {
-					break
-				}
-
-				writeStr = fmt.Sprintf(langText, varNames[i], v[i])
-
-				_, err = f.WriteString(writeStr)
-				if err != nil {
-					return err
-				}
-
-			}
-
-			// localization writing end
-
-			writeStr = fmt.Sprintf(endText, headguardStr)
-
-			_, err = f.WriteString(writeStr)
-			if err != nil {
-				return err
-			}
-
-			log.Println("Done generating:", srcName, headName)
-
-		}
-	*/
 	return err
 }
 
 func createHeader(langMap map[string][]string, templateInfo *templateInfo_t) (err error) {
 	defer func() {
 		if err != nil {
-			err = fmt.Errorf("creating header file failed: %w", err)
+			err = fmt.Errorf("creating header (.h) file failed: %w", err)
 		}
 	}()
 
@@ -277,6 +220,63 @@ func createHeader(langMap map[string][]string, templateInfo *templateInfo_t) (er
 	// creation done
 
 	fmt.Println("Done creating:", templateInfo.headFilepath)
+
+	return err
+}
+
+func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err error) {
+	defer func() {
+		if err != nil {
+			err = fmt.Errorf("creating source (.c) file failed: %w", err)
+		}
+	}()
+
+	f, err := os.Create(templateInfo.srcFilepath)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	// creation
+	var langValuesDefinitionsText string
+	//var langValueListText string = ""
+
+	for idx, v := range templateInfo.langOptTexts {
+		langValuesDefinitionsText += fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
+		langValuesDefinitionsText += "{ "
+		for subidx, str := range v {
+			langValuesDefinitionsText += fmt.Sprintf("\"%s\" /*%d*/, ", str, subidx+1)
+		}
+		langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
+	}
+
+	var varDefinitions string
+	for idx, v := range templateInfo.langOptEnums {
+		varDefinitions += fmt.Sprintf("\t[%s] = %s_TEXTS_LLMSGR,\n", v, templateInfo.langOptEnums[idx])
+	}
+
+	log.Print(langValuesDefinitionsText)
+
+	//for _, v := range templateInfo.langOptEnums {
+	//	VarEnumText = VarEnumText + fmt.Sprintf("\t#define %s_TEXTS_LLMSGR ,\n", v)
+	//}
+	//log.Print(VarEnumText)
+
+	writeStr := fmt.Sprintf(dynamicSrcText,
+		templateInfo.headName,
+		templateInfo.headguardDefine,
+		langValuesDefinitionsText,
+		templateInfo.varname,
+		varDefinitions)
+
+	_, err = f.WriteString(writeStr)
+	if err != nil {
+		return err
+	}
+	// creation done
+
+	fmt.Println("Done creating:", templateInfo.srcFilepath)
 
 	return err
 }
