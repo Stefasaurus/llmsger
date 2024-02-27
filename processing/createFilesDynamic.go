@@ -5,6 +5,7 @@ package process
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,17 +25,17 @@ const dynamicHeaderText = `
 
 typedef enum
 {
-	%s
+%s
 	MAX_LANG_OPT,
 }langs_t;
 
 typedef enum
 {
-	%s,
+%s
 	MAX_VAR_OPT,
 }vars_t;
 
-#ifndef _%s_C_LLMSGER
+#ifndef _%s_C_LLMSGER_
 extern char* %s[MAX_LANG_OPT][MAX_VAR_OPT];
 #endif
 
@@ -72,6 +73,13 @@ lang values
 const langAssignTemplate = `[%s] = %s_LLMSGR,`
 
 // Struct containing all required parse information for templates
+
+type langInfo_t struct {
+	langVars     []string
+	langOpts     []string
+	langOptEnums []string
+	langOptTexts [][]string // index correlates with langOpts and langOptEnums
+}
 type templateInfo_t struct {
 	baseName        string
 	headName        string
@@ -80,6 +88,7 @@ type templateInfo_t struct {
 	srcFilepath     string
 	headguardDefine string
 	varname         string
+	langInfo_t
 }
 
 func CreateFilesDynamic(langMap map[string][]string, outDir string, varname string, basename string) (err error) {
@@ -140,8 +149,31 @@ func CreateFilesDynamic(langMap map[string][]string, outDir string, varname stri
 		headFilepath:    headFilepath,
 		srcFilepath:     srcFilepath,
 		headguardDefine: headguardStr,
+		varname:         varname,
+	}
+	ptemplateInfo.langOpts = make([]string, 0, 100)
+	ptemplateInfo.langOptEnums = make([]string, 0, 100)
+	ptemplateInfo.langOptTexts = make([][]string, 0, 100)
+
+	for k, v := range langMap {
+		if k == "var" {
+			ptemplateInfo.langVars = v // Get user variables names
+			continue
+		}
+
+		ptemplateInfo.langOpts = append(ptemplateInfo.langOpts, k)
+
+		temp := strings.ToUpper(strings.ReplaceAll(k, " ", "_"))
+		ptemplateInfo.langOptEnums = append(ptemplateInfo.langOptEnums, temp)
+
 	}
 
+	log.Println("Enums:", ptemplateInfo.langOptEnums)
+	log.Println("Options:", ptemplateInfo.langOpts)
+
+	for _, opt := range ptemplateInfo.langOpts {
+		ptemplateInfo.langOptTexts = append(ptemplateInfo.langOptTexts, langMap[opt]) // Get the translated texts
+	}
 	// First create the header file
 	err = createHeader(langMap, ptemplateInfo)
 	/*
@@ -208,7 +240,7 @@ func CreateFilesDynamic(langMap map[string][]string, outDir string, varname stri
 func createHeader(langMap map[string][]string, templateInfo *templateInfo_t) (err error) {
 	defer func() {
 		if err != nil {
-			err = fmt.Errorf("parsing records failed: %w", err)
+			err = fmt.Errorf("creating header file failed: %w", err)
 		}
 	}()
 
@@ -219,12 +251,30 @@ func createHeader(langMap map[string][]string, templateInfo *templateInfo_t) (er
 
 	defer f.Close()
 
-	//writeStr := fmt.Sprintf(startText, newFilename, headguardStr, headguardStr)
+	// creation
+	var langOptEnumText string = ""
+	var VarEnumText string = ""
 
-	//_, err = f.WriteString(writeStr)
+	for _, v := range templateInfo.langOptEnums {
+		langOptEnumText = langOptEnumText + fmt.Sprintf("\t%s,\n", v)
+	}
+
+	for _, v := range templateInfo.langVars {
+		VarEnumText = VarEnumText + fmt.Sprintf("\t%s,\n", v)
+	}
+
+	writeStr := fmt.Sprintf(dynamicHeaderText,
+		templateInfo.headguardDefine,
+		templateInfo.headguardDefine,
+		langOptEnumText, VarEnumText,
+		templateInfo.headguardDefine,
+		templateInfo.varname)
+
+	_, err = f.WriteString(writeStr)
 	if err != nil {
 		return err
 	}
+	// creation done
 
 	fmt.Println("Done creating:", templateInfo.headFilepath)
 
