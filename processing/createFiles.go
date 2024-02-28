@@ -158,8 +158,8 @@ func CreateFilesMerge(langMap map[string][]string, outDir string, outFile string
 		return err
 	}
 
-	if fileInfo.IsDir() && outDir != "." {
-		err = fmt.Errorf("output filename cannot be a directory %s", outFile)
+	if !fileInfo.IsDir() {
+		err = fmt.Errorf("output path is not a directory %s", outDir)
 		return err
 	}
 

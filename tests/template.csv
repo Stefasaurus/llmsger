@@ -1,0 +1,4 @@
+var,,en,fr,de,custom
+GREET_TEXT,,Hi,Salut,Hallo,Ciao
+EXIT_TEXT,,Bye,Au revoir,Tschuss,Adios amigo
+BUTTON_PRESSED,,button pressed!,bouton enfonce !,knoppie gedruk!,knoppie gedruk!
