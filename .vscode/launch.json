@@ -11,7 +11,7 @@
             "mode": "auto",
             "program": "${fileDirname}",
             "env": {},
-            "args": ["dyngen", "-f", "sample4.csv"]
+            "args": ["-r", "-f", "tests/sample3.csv"]
         }
     ]
 }

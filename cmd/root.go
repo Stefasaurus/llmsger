@@ -18,6 +18,7 @@ var OutputPath string
 var MergeName string
 var cfgFile string
 var bMergeFiles bool
+var bReplace bool
 
 const mergeNameDefault string = "lang_merged"
 
@@ -31,11 +32,11 @@ var rootCmd = &cobra.Command{
 	or multiple unmerged localization files for a programming language 
 	(currently only supports C file generation)`,
 	Example: `
-Process a file so that only one language option can be active:
+	Process a file so that only one language option can be active:
 	.\llmsger.exe -f "sample3.csv" --mrg -n "stef"
-Process a file so that all language option can be active:
+	Process a file so that all language option can be active:
 	.\llmsger.exe dyngen -f "sample.csv" --basename "example" --varname "exampleVarname"`,
-	Version: `0.2.0`,
+	Version: `0.9.0`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var err error
@@ -64,6 +65,16 @@ Process a file so that all language option can be active:
 				return err
 			}
 
+			if bReplace {
+				err = process.ReplaceFields(langMap)
+				if err != nil {
+					return err
+				}
+			} else {
+				delete(langMap, "from")
+				delete(langMap, "toascii")
+			}
+
 			if bMergeFiles {
 				fmt.Println("Processing merged files...")
 				//return nil
@@ -74,6 +85,7 @@ Process a file so that all language option can be active:
 
 		}
 
+		fmt.Println("Done!")
 		return err
 	},
 	// Uncomment the following line if your bare application
@@ -105,6 +117,8 @@ func init() {
 	rootCmd.Flags().StringVarP(&MergeName, "mergename", "n", mergeNameDefault, "Output file(s) path (optional)")
 
 	rootCmd.Flags().BoolVar(&bMergeFiles, "mrg", false, "Output files will be merged into one file, by default the name is \"lang_merged\"")
+
+	rootCmd.PersistentFlags().BoolVarP(&bReplace, "replace", "r", false, "Replaces all instances of the \"from\" column, with the ASCII code in the \"toascii\" column (optional)")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

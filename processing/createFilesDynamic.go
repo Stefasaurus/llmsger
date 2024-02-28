@@ -5,7 +5,6 @@ package process
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,9 +14,15 @@ import (
 header guard,
 header guard,
 enum lang values,
+uppercase basename,
+basename,
 enum var values,
+uppercase basename,
+basename
 header guard,
-global variable name
+global variable name,
+uppercase basename,
+uppercase basename,
 */
 const dynamicHeaderText = `
 #ifndef %s
@@ -26,17 +31,17 @@ const dynamicHeaderText = `
 typedef enum
 {
 %s
-	MAX_LANG_OPT,
-}langs_t;
+	MAX_%s_LANG_OPT,
+}%s_langs_t;
 
 typedef enum
 {
 %s
-	MAX_VAR_OPT,
-}vars_t;
+	MAX_%s_VAR_OPT,
+}%s_vars_t;
 
 #ifndef _%s_C_LLMSGER_
-extern char* %s[MAX_LANG_OPT][MAX_VAR_OPT];
+extern char* %s[MAX_%s_LANG_OPT][MAX_%s_VAR_OPT];
 #endif
 
 
@@ -51,7 +56,9 @@ lang values list i.e.
 	#define EN_TEXTS_LLMSGR { "Hi" , "Good day",}
 	#define FR_TEXTS_LLMSGR { "Bonjour" , "Bonne journée" ,}
 
-global variable name
+global variable name,
+uppercase basename,
+uppercase basename,
 lang assignments,
 */
 const dynamicSrcText = `
@@ -61,15 +68,11 @@ const dynamicSrcText = `
 
 %s
 
-char* %s[MAX_LANG_OPT][MAX_VAR_OPT] =
+char* %s[MAX_%s_LANG_OPT][MAX_%s_VAR_OPT] =
 {
 %s
 };
-
-/*
-enum lang value,
-lang values
-*/`
+`
 
 // Struct containing all required parse information for templates
 
@@ -167,9 +170,6 @@ func CreateFilesDynamic(langMap map[string][]string, outDir string, varname stri
 
 	}
 
-	log.Println("Enums:", ptemplateInfo.langOptEnums)
-	log.Println("Options:", ptemplateInfo.langOpts)
-
 	for _, opt := range ptemplateInfo.langOpts {
 		ptemplateInfo.langOptTexts = append(ptemplateInfo.langOptTexts, langMap[opt]) // Get the translated texts
 	}
@@ -209,9 +209,16 @@ func createHeader(langMap map[string][]string, templateInfo *templateInfo_t) (er
 	writeStr := fmt.Sprintf(dynamicHeaderText,
 		templateInfo.headguardDefine,
 		templateInfo.headguardDefine,
-		langOptEnumText, VarEnumText,
+		langOptEnumText,
+		strings.ToUpper(templateInfo.baseName),
+		templateInfo.baseName,
+		VarEnumText,
+		strings.ToUpper(templateInfo.baseName),
+		templateInfo.baseName,
 		templateInfo.headguardDefine,
-		templateInfo.varname)
+		templateInfo.varname,
+		strings.ToUpper(templateInfo.baseName),
+		strings.ToUpper(templateInfo.baseName))
 
 	_, err = f.WriteString(writeStr)
 	if err != nil {
@@ -256,8 +263,6 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 		varDefinitions += fmt.Sprintf("\t[%s] = %s_TEXTS_LLMSGR,\n", v, templateInfo.langOptEnums[idx])
 	}
 
-	log.Print(langValuesDefinitionsText)
-
 	//for _, v := range templateInfo.langOptEnums {
 	//	VarEnumText = VarEnumText + fmt.Sprintf("\t#define %s_TEXTS_LLMSGR ,\n", v)
 	//}
@@ -268,6 +273,8 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 		templateInfo.headguardDefine,
 		langValuesDefinitionsText,
 		templateInfo.varname,
+		strings.ToUpper(templateInfo.baseName),
+		strings.ToUpper(templateInfo.baseName),
 		varDefinitions)
 
 	_, err = f.WriteString(writeStr)

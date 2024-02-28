@@ -48,12 +48,22 @@ var dyngenCmd = &cobra.Command{
 				return err
 			}
 
+			if bReplace {
+				err = process.ReplaceFields(langMap)
+				if err != nil {
+					return err
+				}
+			} else {
+				delete(langMap, "from")
+				delete(langMap, "toascii")
+			}
+
 			fmt.Println("Generating files...")
 			//return nil
 			err = process.CreateFilesDynamic(langMap, OutputPath, DynVariableName, DynBaseName)
 
 		}
-
+		fmt.Println("Done!")
 		return err
 	},
 }
