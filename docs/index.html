@@ -1,49 +1,147 @@
-
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta name="google-site-verification" content="bBkOkJRlE9vplkKezJtCZA5oUL3mQF0nYhpIIyT2kJE" />
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <html>
+        <head>
+          <meta name="google-site-verification" content="bBkOkJRlE9vplkKezJtCZA5oUL3mQF0nYhpIIyT2kJE" />
 
-<!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>llmsger | llmsger CLI code generation tool for localization string managmenent</title>
-<meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="llmsger" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="llmsger CLI code generation tool for localization string managmenent" />
-<meta property="og:description" content="llmsger CLI code generation tool for localization string managmenent" />
-<link rel="canonical" href="https://stefasaurus.github.io/llmsger/" />
-<meta property="og:url" content="https://stefasaurus.github.io/llmsger/" />
-<meta property="og:site_name" content="llmsger" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="llmsger" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"llmsger CLI code generation tool for localization string managmenent","headline":"llmsger","name":"llmsger","url":"https://stefasaurus.github.io/llmsger/"}</script>
-<!-- End Jekyll SEO tag -->
+            <meta charset="UTF-8">
+            <title>Overview</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
-    <link rel="stylesheet" href="/llmsger/assets/css/style.css?v=bf89ecb62affa24569b7f24d794df2fc2d8c0afa">
-    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
 
-<!-- Setup Google Analytics -->
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
 
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
 
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
 
-<!-- You can set your favicon here -->
-<!-- link rel="shortcut icon" type="image/x-icon" href="/llmsger/favicon.ico" -->
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
 
-<!-- end custom head snippets -->
+.markdown-alert>:first-child {
+  margin-top: 0
+}
 
-  </head>
-  <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-      <h1><a href="https://stefasaurus.github.io/llmsger/">llmsger</a></h1>
-      
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
 
-      <h1 align="center">
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 align="center">
   llmsger
 </h1>
 <h3 align="center">
@@ -52,213 +150,178 @@
 <p align="center">
   <a href="https://github.com/Stefasaurus/llmsger" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/GitHub-Source-success" alt="View project on GitHub" /></a>&nbsp;
 </p>
-
 <h2 id="overview">Overview</h2>
-
 <p>This CLI tool allows you to generate files recquired for the localization of strings in a
 project (currently only C projects), all from a CSV file.</p>
-
 <h3 id="features-include">Features include:</h3>
-
 <ul>
-  <li>Creation of C files for the purpose of localization</li>
-  <li>Merging localization files</li>
-  <li>Customizing many aspects of auto-generated code</li>
-  <li>Creating dynamically usable localization files, which enable using all localized strings in runtime!</li>
-  <li>Ability to replace all user defined UTF-8 characters with ASCII codes
-<!-- [lock:donate] 🚫--------------------------------------- --></li>
+<li>Creation of C files for the purpose of localization</li>
+<li>Merging localization files</li>
+<li>Customizing many aspects of auto-generated code</li>
+<li>Creating dynamically usable localization files, which enable using all localized strings in runtime!</li>
+<li>Ability to replace all user defined UTF-8 characters with ASCII codes</li>
 </ul>
-
+<!-- [lock:donate] 🚫--------------------------------------- -->
 <h2 id="table-of-contents">Table of Contents</h2>
-
 <ul>
-  <li><a href="#overview">Overview</a>
-    <ul>
-      <li><a href="#features-include">Features include:</a></li>
-    </ul>
-  </li>
-  <li><a href="#table-of-contents">Table of Contents</a></li>
-  <li><a href="#clone-the-project">Clone the project</a></li>
-  <li><a href="#install-dependencies">Install dependencies</a></li>
-  <li><a href="#basic-usage">Basic usage</a></li>
-  <li><a href="#advanced-usage">Advanced usage</a></li>
-  <li><a href="#using-the-utf-8-to-ascii-code-replacer">Using the UTF-8 to ASCII code replacer</a></li>
-  <li><a href="#contributing">Contributing</a></li>
-  <li><a href="#-found-it-helpful-star-it">⭐ Found It Helpful? Star It!</a></li>
-  <li><a href="#license">License</a></li>
+<li><a href="#overview">Overview</a>
+<ul>
+<li><a href="#features-include">Features include:</a></li>
 </ul>
-
+</li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#clone-the-project">Clone the project</a></li>
+<li><a href="#install-dependencies">Install dependencies</a></li>
+<li><a href="#basic-usage">Basic usage</a></li>
+<li><a href="#advanced-usage">Advanced usage</a></li>
+<li><a href="#using-the-utf-8-to-ascii-code-replacer">Using the UTF-8 to ASCII code replacer</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#-found-it-helpful-star-it">⭐ Found It Helpful? Star It!</a></li>
+<li><a href="#license">License</a></li>
+</ul>
 <h2 id="clone-the-project">Clone the project</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Stefasaurus/llmsger.git
-</code></pre></div></div>
-
+<pre><code class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/Stefasaurus/llmsger.git
+</code></pre>
 <h2 id="install-dependencies">Install dependencies</h2>
-
-<p>To be able to buld the project, you must install <a href="https://go.dev/doc/install">Go</a>.<br />
+<p>To be able to buld the project, you must install <a href="https://go.dev/doc/install">Go</a>.<br>
 Then using <em>make</em>, run the following in the directory of the Makefile:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make
-</code></pre></div></div>
+<pre><code class="language-bash">make
+</code></pre>
 <p>For windows, it is recommended to run make using git bash.</p>
-
 <h2 id="basic-usage">Basic usage</h2>
-
 <p>Preparation:
-It is suggested to use a CSV file editor that allows viewing CSV files as spreadsheets. Something such as https://www.libreoffice.org/ is recommended.</p>
-
+It is suggested to use a CSV file editor that allows viewing CSV files as spreadsheets. Something such as <a href="https://www.libreoffice.org/">https://www.libreoffice.org/</a> is recommended.</p>
 <ol>
-  <li>Create a CSV (.csv) file such as the “template.csv” included in the project directory (shown below):</li>
+<li>Create a CSV (.csv) file such as the &quot;template.csv&quot; included in the project directory (shown below):</li>
 </ol>
-
 <table>
-  <thead>
-    <tr>
-      <th>var</th>
-      <th> </th>
-      <th>en</th>
-      <th>fr</th>
-      <th>de</th>
-      <th>custom</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GREET_TEXT</td>
-      <td> </td>
-      <td>Hi</td>
-      <td>Salut</td>
-      <td>Hallo</td>
-      <td>Ciao</td>
-    </tr>
-    <tr>
-      <td>EXIT_TEXT</td>
-      <td> </td>
-      <td>Bye</td>
-      <td>Au revoir</td>
-      <td>Tschuss</td>
-      <td>Adios amigo</td>
-    </tr>
-    <tr>
-      <td>BUTTON_PRESSED</td>
-      <td> </td>
-      <td>button pressed!</td>
-      <td>bouton enfonce !</td>
-      <td>Knopf gedruckt!</td>
-      <td>knoppie gedruk!</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>var</th>
+<th></th>
+<th>en</th>
+<th>fr</th>
+<th>de</th>
+<th>custom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GREET_TEXT</td>
+<td></td>
+<td>Hi</td>
+<td>Salut</td>
+<td>Hallo</td>
+<td>Ciao</td>
+</tr>
+<tr>
+<td>EXIT_TEXT</td>
+<td></td>
+<td>Bye</td>
+<td>Au revoir</td>
+<td>Tschuss</td>
+<td>Adios amigo</td>
+</tr>
+<tr>
+<td>BUTTON_PRESSED</td>
+<td></td>
+<td>button pressed!</td>
+<td>bouton enfonce !</td>
+<td>Knopf gedruckt!</td>
+<td>knoppie gedruk!</td>
+</tr>
+</tbody>
 </table>
-
-<p>The “var” field is mandatory, and <span style="color:red"><em>must</em></span> be the first field in the CSV!
+<p>The &quot;var&quot; field is mandatory, and <span style="color:red"><em>must</em></span> be the first field in the CSV!
 This example only uses ASCII characters, but UTF-8 characters can also be written in the language definition fields (i.e. Tschüss).</p>
-
-<ol>
-  <li>To create the default split localization headers, run:
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>.<span class="se">\b</span>uild<span class="se">\w</span>indows<span class="se">\a</span>md64<span class="se">\l</span>lmsger.exe <span class="nt">-f</span> <span class="s2">"tests/template.csv"</span> <span class="nt">-o</span> <span class="s2">"tests"</span>
-</code></pre></div>    </div>
-    <p>Modify this step so that you use the built executable appropriate for your machine.
-You should now see four new header files created in the tests directory:</p>
-    <ul>
-      <li><em>en_lang.h</em></li>
-      <li><em>fr_lang.h</em></li>
-      <li><em>de_lang.h</em></li>
-      <li><em>custom_lang.h</em></li>
-    </ul>
-  </li>
+<ol start="2">
+<li>To create the default split localization headers, run:</li>
 </ol>
-
-<p>These files define the localized strings and their appropriate variable macro name. This default use of llmsger is less useful since it allows the user to only use one of these files in his/her project.<br />
-<br />
-Another use of the default llmsger command, is to merge all the language headers into one file. This way the user can define the language set to use in the project by editing the correct macro in the created file.<br />
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -o <span class="hljs-string">&quot;tests&quot;</span>
+</code></pre>
+<p>Modify this step so that you use the built executable appropriate for your machine.
+You should now see four new header files created in the tests directory:</p>
+<ul>
+<li><em>en_lang.h</em></li>
+<li><em>fr_lang.h</em></li>
+<li><em>de_lang.h</em></li>
+<li><em>custom_lang.h</em></li>
+</ul>
+<p>These files define the localized strings and their appropriate variable macro name. This default use of llmsger is less useful since it allows the user to only use one of these files in his/her project.<br>
+<br>
+Another use of the default llmsger command, is to merge all the language headers into one file. This way the user can define the language set to use in the project by editing the correct macro in the created file.<br>
 An example to do so would be:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>.<span class="se">\b</span>uild<span class="se">\w</span>indows<span class="se">\a</span>md64<span class="se">\l</span>lmsger.exe <span class="nt">-f</span> <span class="s2">"tests/template.csv"</span> <span class="nt">-o</span> <span class="s2">"tests"</span> <span class="nt">--mrg</span> <span class="nt">-n</span> my_merged
-</code></pre></div></div>
-<p>This creates the file “<em>my_merged.h</em>” which combines all the language definitions, which are selected through “<em>#ifdef</em>” statements.</p>
-
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -o <span class="hljs-string">&quot;tests&quot;</span> --mrg -n my_merged
+</code></pre>
+<p>This creates the file &quot;<em>my_merged.h</em>&quot; which combines all the language definitions, which are selected through &quot;<em>#ifdef</em>&quot; statements.</p>
 <h2 id="advanced-usage">Advanced usage</h2>
-<p>Most modern projects have to have the ability to use all the localized strings in the project during runtime. For this reason, the llmsger includes the command <em>dyngen</em>, which creates a ‘.c’ and ‘.h’ file that allows the user to use all the strings in his/her project.<br />
+<p>Most modern projects have to have the ability to use all the localized strings in the project during runtime. For this reason, the llmsger includes the command <em>dyngen</em>, which creates a '.c' and '.h' file that allows the user to use all the strings in his/her project.<br>
 An example of calling this command would be the following:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>.<span class="se">\b</span>uild<span class="se">\w</span>indows<span class="se">\a</span>md64<span class="se">\l</span>lmsger.exe dyngen <span class="nt">-f</span> tests/template.csv <span class="nt">-o</span> <span class="s2">"tests"</span> <span class="nt">--basename</span> stef
-</code></pre></div></div>
-<p>This creates “<em>stef.c</em>” and “<em>stef.h</em>” in the tests directory. The source file should look like this (<em>stef.c</em>):</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"stef.h"</span><span class="cp">
-</span>
-<span class="cp">#define _STEF_H_C_LLMSGER_ // Guard from extern in header file
-</span>
-<span class="cp">#define EN_TEXTS_LLMSGR { "Hi" </span><span class="cm">/*1*/</span><span class="cp">, "Bye" </span><span class="cm">/*2*/</span><span class="cp">, "button pressed!" </span><span class="cm">/*3*/</span><span class="cp">, }
-</span>
-<span class="cp">#define FR_TEXTS_LLMSGR { "Salut" </span><span class="cm">/*1*/</span><span class="cp">, "Au revoir" </span><span class="cm">/*2*/</span><span class="cp">, "bouton enfonce !" </span><span class="cm">/*3*/</span><span class="cp">, }
-</span>
-<span class="cp">#define DE_TEXTS_LLMSGR { "Hallo" </span><span class="cm">/*1*/</span><span class="cp">, "Tschuss" </span><span class="cm">/*2*/</span><span class="cp">, "knoppie gedruk!" </span><span class="cm">/*3*/</span><span class="cp">, }
-</span>
-<span class="cp">#define CUSTOM_TEXTS_LLMSGR { "Ciao" </span><span class="cm">/*1*/</span><span class="cp">, "Adios amigo" </span><span class="cm">/*2*/</span><span class="cp">, "knoppie gedruk!" </span><span class="cm">/*3*/</span><span class="cp">, }
-</span>
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe dyngen -f tests/template.csv -o <span class="hljs-string">&quot;tests&quot;</span> --<span class="hljs-built_in">basename</span> stef
+</code></pre>
+<p>This creates &quot;<em>stef.c</em>&quot; and &quot;<em>stef.h</em>&quot; in the tests directory. The source file should look like this (<em>stef.c</em>):</p>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;stef.h&quot;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> _STEF_H_C_LLMSGER_ <span class="hljs-comment">// Guard from extern in header file</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> EN_TEXTS_LLMSGR { <span class="hljs-string">&quot;Hi&quot;</span> <span class="hljs-comment">/*1*/</span>, <span class="hljs-string">&quot;Bye&quot;</span> <span class="hljs-comment">/*2*/</span>, <span class="hljs-string">&quot;button pressed!&quot;</span> <span class="hljs-comment">/*3*/</span>, }</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> FR_TEXTS_LLMSGR { <span class="hljs-string">&quot;Salut&quot;</span> <span class="hljs-comment">/*1*/</span>, <span class="hljs-string">&quot;Au revoir&quot;</span> <span class="hljs-comment">/*2*/</span>, <span class="hljs-string">&quot;bouton enfonce !&quot;</span> <span class="hljs-comment">/*3*/</span>, }</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> DE_TEXTS_LLMSGR { <span class="hljs-string">&quot;Hallo&quot;</span> <span class="hljs-comment">/*1*/</span>, <span class="hljs-string">&quot;Tschuss&quot;</span> <span class="hljs-comment">/*2*/</span>, <span class="hljs-string">&quot;knoppie gedruk!&quot;</span> <span class="hljs-comment">/*3*/</span>, }</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> CUSTOM_TEXTS_LLMSGR { <span class="hljs-string">&quot;Ciao&quot;</span> <span class="hljs-comment">/*1*/</span>, <span class="hljs-string">&quot;Adios amigo&quot;</span> <span class="hljs-comment">/*2*/</span>, <span class="hljs-string">&quot;knoppie gedruk!&quot;</span> <span class="hljs-comment">/*3*/</span>, }</span>
 
 
-<span class="kt">char</span><span class="o">*</span> <span class="n">gp_lang_texts</span><span class="p">[</span><span class="n">MAX_STEF_LANG_OPT</span><span class="p">][</span><span class="n">MAX_STEF_VAR_OPT</span><span class="p">]</span> <span class="o">=</span>
-<span class="p">{</span>
-	<span class="p">[</span><span class="n">EN</span><span class="p">]</span> <span class="o">=</span> <span class="n">EN_TEXTS_LLMSGR</span><span class="p">,</span>
-	<span class="p">[</span><span class="n">FR</span><span class="p">]</span> <span class="o">=</span> <span class="n">FR_TEXTS_LLMSGR</span><span class="p">,</span>
-	<span class="p">[</span><span class="n">DE</span><span class="p">]</span> <span class="o">=</span> <span class="n">DE_TEXTS_LLMSGR</span><span class="p">,</span>
-	<span class="p">[</span><span class="n">CUSTOM</span><span class="p">]</span> <span class="o">=</span> <span class="n">CUSTOM_TEXTS_LLMSGR</span><span class="p">,</span>
 
-<span class="p">};</span>
-</code></pre></div></div>
+<span class="hljs-type">char</span>* gp_lang_texts[MAX_STEF_LANG_OPT][MAX_STEF_VAR_OPT] =
+{
+	[EN] = EN_TEXTS_LLMSGR,
+	[FR] = FR_TEXTS_LLMSGR,
+	[DE] = DE_TEXTS_LLMSGR,
+	[CUSTOM] = CUSTOM_TEXTS_LLMSGR,
+
+};
+</code></pre>
 <p>These files define the variable named gp_lang_texts (this is the default name which can be modified with other flags):</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span><span class="o">*</span> <span class="n">gp_lang_texts</span><span class="p">[</span><span class="n">MAX_STEF_LANG_OPT</span><span class="p">][</span><span class="n">MAX_STEF_VAR_OPT</span><span class="p">];</span>
-</code></pre></div></div>
+<pre><code class="language-c"><span class="hljs-type">char</span>* gp_lang_texts[MAX_STEF_LANG_OPT][MAX_STEF_VAR_OPT];
+</code></pre>
 <p>Through this variable, the user can access all the strings in a similar way as:</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-#include</span> <span class="cpf">"your_PATH\llmsger.h"</span><span class="cp">
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  
-		<span class="n">printf</span><span class="p">(</span><span class="s">"EN:</span><span class="se">\t</span><span class="s">%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">gp_lang_texts</span><span class="p">[</span><span class="n">EN</span><span class="p">][</span><span class="n">GREET_TEXT</span><span class="p">]);</span>
-		<span class="n">printf</span><span class="p">(</span><span class="s">"FR:</span><span class="se">\t</span><span class="s">%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">gp_lang_texts</span><span class="p">[</span><span class="n">FR</span><span class="p">][</span><span class="n">GREET_TEXT</span><span class="p">]);</span>
-		<span class="n">printf</span><span class="p">(</span><span class="s">"GERMAN:</span><span class="se">\t</span><span class="s">%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">gp_lang_texts</span><span class="p">[</span><span class="n">DE</span><span class="p">][</span><span class="n">GREET_TEXT</span><span class="p">]);</span>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;your_PATH\llmsger.h&quot;</span></span>
 
-<span class="cm">/* Prints out:
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+  
+		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;EN:\t%s\n&quot;</span>, gp_lang_texts[EN][GREET_TEXT]);
+		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;FR:\t%s\n&quot;</span>, gp_lang_texts[FR][GREET_TEXT]);
+		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;GERMAN:\t%s\n&quot;</span>, gp_lang_texts[DE][GREET_TEXT]);
+
+<span class="hljs-comment">/* Prints out:
         EN:     Hi
         FR:     Salut
         GERMAN: Hallo
 */</span>
-	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>You can view the corresponding enums for your localizations in the header file.<br />
-<br />
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>You can view the corresponding enums for your localizations in the header file.<br>
+<br>
 Please feel free to make as many localization strings as you would like!
-<br />
+<br>
 Other helpful information can be seen when running the <em>help</em> command.</p>
 <h2 id="using-the-utf-8-to-ascii-code-replacer">Using the UTF-8 to ASCII code replacer</h2>
 <p>Todo readme text</p>
-
 <h2 id="contributing">Contributing</h2>
-
 <p>Open source software is important for the community.</p>
-
 <p>Feel free to submit a pull request for bugs or additions, and make sure to update tests as appropriate or include the files recquired for bug recreation. If you find a mistake in the docs, send a PR! Even the smallest changes help.</p>
-
-<p>For major changes, open an issue first to discuss what you’d like to change.</p>
-
+<p>For major changes, open an issue first to discuss what you'd like to change.</p>
 <!-- [/lock:contributing] --------------------------------------🚫 -->
-
 <h2 id="-found-it-helpful-star-it">⭐ Found It Helpful? Star It!</h2>
-
 <p>If you found this project helpful, let the community know by giving it a star: ⭐</p>
-
 <h2 id="license">License</h2>
-
 <p>See <a href="https://github.com/Stefasaurus/llmsger/blob/main/LICENSE">LICENSE.md</a>.</p>
 
-
-      
-      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
-        This site is open source. <a href="https://github.com/Stefasaurus/llmsger/edit/main/README.md">Improve this page</a>.
-      </div>
-      
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
-    <script>anchors.add();</script>
-  </body>
-</html>
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>
