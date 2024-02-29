@@ -11,6 +11,7 @@ import (
 	process "github.com/Stefasaurus/llmsger/processing"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.szostok.io/version/extension"
 )
 
 var CsvPath string
@@ -36,7 +37,7 @@ var rootCmd = &cobra.Command{
 	.\llmsger.exe -f "sample3.csv" --mrg -n "stef"
 	Process a file so that all language option can be active:
 	.\llmsger.exe dyngen -f "sample.csv" --basename "example" --varname "exampleVarname"`,
-	Version: `0.9.0`,
+	//Version: `0.9.0`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var err error
@@ -48,7 +49,8 @@ var rootCmd = &cobra.Command{
 		}()
 
 		if CsvPath == "" {
-			err = errors.New("path unspecified")
+			err = errors.New("target file path unspecified")
+			return err
 		} else {
 
 			if cmd.Flags().Changed("mergename") && !bMergeFiles {
@@ -110,15 +112,23 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVarP(&CsvPath, "filepath", "f", "", "Input CSV file path")
-	rootCmd.MarkPersistentFlagRequired("filepath")
+	//rootCmd.MarkPersistentFlagRequired("filepath")
 
-	rootCmd.PersistentFlags().StringVarP(&OutputPath, "outdir", "o", ".", "Output file(s) path (optional)")
+	rootCmd.PersistentFlags().StringVarP(&OutputPath, "outdir", "d", ".", "Output file(s) path (optional)")
 
 	rootCmd.Flags().StringVarP(&MergeName, "mergename", "n", mergeNameDefault, "Output file(s) path (optional)")
 
 	rootCmd.Flags().BoolVar(&bMergeFiles, "mrg", false, "Output files will be merged into one file, by default the name is \"lang_merged\"")
 
 	rootCmd.PersistentFlags().BoolVarP(&bReplace, "replace", "r", false, "Replaces all instances of the \"from\" column, with the ASCII code in the \"toascii\" column (optional)")
+
+	rootCmd.AddCommand(
+		// 1. Register the 'version' command
+		extension.NewVersionCobraCmd(
+			// 2. Explicitly enable upgrade notice
+			extension.WithUpgradeNotice("Stefasaurus", "llmsger"),
+		),
+	)
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

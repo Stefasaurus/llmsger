@@ -36,7 +36,8 @@ var dyngenCmd = &cobra.Command{
 		}()
 
 		if CsvPath == "" {
-			err = errors.New("path unspecified")
+			err = errors.New("target file path unspecified")
+			return err
 		} else {
 
 			fmt.Println("Processing CSV...")

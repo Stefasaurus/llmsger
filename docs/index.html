@@ -237,7 +237,7 @@ This example only uses ASCII characters, but UTF-8 characters can also be writte
 <ol start="2">
 <li>To create the default split localization headers, run:</li>
 </ol>
-<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -o <span class="hljs-string">&quot;tests&quot;</span>
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -d <span class="hljs-string">&quot;tests&quot;</span>
 </code></pre>
 <p>Modify this step so that you use the built executable appropriate for your machine.
 You should now see four new header files created in the tests directory:</p>
@@ -251,13 +251,13 @@ You should now see four new header files created in the tests directory:</p>
 <br>
 Another use of the default llmsger command, is to merge all the language headers into one file. This way the user can define the language set to use in the project by editing the correct macro in the created file.<br>
 An example to do so would be:</p>
-<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -o <span class="hljs-string">&quot;tests&quot;</span> --mrg -n my_merged
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe -f <span class="hljs-string">&quot;tests/template.csv&quot;</span> -d <span class="hljs-string">&quot;tests&quot;</span> --mrg -n my_merged
 </code></pre>
 <p>This creates the file &quot;<em>my_merged.h</em>&quot; which combines all the language definitions, which are selected through &quot;<em>#ifdef</em>&quot; statements.</p>
 <h2 id="advanced-usage">Advanced usage</h2>
 <p>Most modern projects have to have the ability to use all the localized strings in the project during runtime. For this reason, the llmsger includes the command <em>dyngen</em>, which creates a '.c' and '.h' file that allows the user to use all the strings in his/her project.<br>
 An example of calling this command would be the following:</p>
-<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe dyngen -f tests/template.csv -o <span class="hljs-string">&quot;tests&quot;</span> --<span class="hljs-built_in">basename</span> stef
+<pre><code class="language-bash">$ ./build/windows/amd64/llmsger.exe dyngen -f tests/template.csv -d <span class="hljs-string">&quot;tests&quot;</span> --<span class="hljs-built_in">basename</span> stef
 </code></pre>
 <p>This creates &quot;<em>stef.c</em>&quot; and &quot;<em>stef.h</em>&quot; in the tests directory. The source file should look like this (<em>stef.c</em>):</p>
 <pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;stef.h&quot;</span></span>
