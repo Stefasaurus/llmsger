@@ -50,7 +50,9 @@ Then using *make*, run the following in the directory of the Makefile:
 ```bash
 make
 ```
-For windows, it is recommended to run make using git bash.
+For windows, it is recommended to run make using git bash.\
+\
+Note: in the "*bulds/*" directory there is a makefile that builds the project for multiple operating systems. 
 
 ## Basic usage
 
@@ -71,7 +73,7 @@ This example only uses ASCII characters, but UTF-8 characters can also be writte
 
 2. To create the default split localization headers, run:
   ```bash
-$ ./build/windows/amd64/llmsger.exe -f "tests/template.csv" -d "tests"
+$ ./llmsger.exe -f "tests/template.csv" -d "tests"
   ```
 Modify this step so that you use the built executable appropriate for your machine.
 You should now see four new header files created in the tests directory:
@@ -85,7 +87,7 @@ These files define the localized strings and their appropriate variable macro na
 Another use of the default llmsger command, is to merge all the language headers into one file. This way the user can define the language set to use in the project by editing the correct macro in the created file.\
 An example to do so would be:
 ```bash
-$ ./build/windows/amd64/llmsger.exe -f "tests/template.csv" -d "tests" --mrg -n my_merged
+$ ./llmsger.exe -f "tests/template.csv" -d "tests" --mrg -n my_merged
 ```
 This creates the file "*my_merged.h*" which combines all the language definitions, which are selected through "*#ifdef*" statements.
 
@@ -93,7 +95,7 @@ This creates the file "*my_merged.h*" which combines all the language definition
 Most modern projects have to have the ability to use all the localized strings in the project during runtime. For this reason, the llmsger includes the command *dyngen*, which creates a '.c' and '.h' file that allows the user to use all the strings in his/her project.\
 An example of calling this command would be the following:
 ```bash
-$ ./build/windows/amd64/llmsger.exe dyngen -f tests/template.csv -d "tests" --basename stef
+$ ./llmsger.exe dyngen -f tests/template.csv -d "tests" --basename stef
 ```
 This creates "*stef.c*" and "*stef.h*" in the tests directory. The source file should look like this (*stef.c*):
 ```c
@@ -149,7 +151,7 @@ Please feel free to make as many localization strings as you would like!
 \
 Other helpful information can be seen when running the *help* command.
 ## Using the UTF-8 to ASCII code replacer
-Todo readme text
+Todo but implemented
 
 ## Contributing
 
