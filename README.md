@@ -40,7 +40,7 @@ project (currently only C projects), all from a CSV file.
 
 ## Clone the project
 
-```console
+```bash
 git clone https://github.com/Stefasaurus/llmsger.git
 ```
 
@@ -71,8 +71,8 @@ The "var" field is mandatory, and <span style="color:red">*must*</span> be the f
 This example only uses ASCII characters, but UTF-8 characters can also be written in the language definition fields (i.e. Tschüss).
 
 2. To create the default split localization headers, run:
-  ```console
-$ .\build\windows\amd64\llmsger.exe -f "tests/template.csv" -o "tests"
+  ```bash
+$ ./build/windows/amd64/llmsger.exe -f "tests/template.csv" -o "tests"
   ```
 Modify this step so that you use the built executable appropriate for your machine.
 You should now see four new header files created in the tests directory:
@@ -85,16 +85,16 @@ These files define the localized strings and their appropriate variable macro na
 \
 Another use of the default llmsger command, is to merge all the language headers into one file. This way the user can define the language set to use in the project by editing the correct macro in the created file.\
 An example to do so would be:
-```console
-$ .\build\windows\amd64\llmsger.exe -f "tests/template.csv" -o "tests" --mrg -n my_merged
+```bash
+$ ./build/windows/amd64/llmsger.exe -f "tests/template.csv" -o "tests" --mrg -n my_merged
 ```
 This creates the file "*my_merged.h*" which combines all the language definitions, which are selected through "*#ifdef*" statements.
 
 ## Advanced usage
 Most modern projects have to have the ability to use all the localized strings in the project during runtime. For this reason, the llmsger includes the command *dyngen*, which creates a '.c' and '.h' file that allows the user to use all the strings in his/her project.\
 An example of calling this command would be the following:
-```console
-$ .\build\windows\amd64\llmsger.exe dyngen -f tests/template.csv -o "tests" --basename stef
+```bash
+$ ./build/windows/amd64/llmsger.exe dyngen -f tests/template.csv -o "tests" --basename stef
 ```
 This creates "*stef.c*" and "*stef.h*" in the tests directory. The source file should look like this (*stef.c*):
 ```c
