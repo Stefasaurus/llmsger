@@ -1,7 +1,6 @@
 <h1 align="center">
-<h2>
   llmsger
-</h2>
+</h1>
 <h3 align="center">
   A CSV localization and text management CLI tool.
 </h3>
