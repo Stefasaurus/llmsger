@@ -76,10 +76,10 @@ $ .\build\windows\amd64\llmsger.exe -f "tests/template.csv" -o "tests"
   ```
 Modify this step so that you use the built executable appropriate for your machine.
 You should now see four new header files created in the tests directory:
-- en_lang.h
-- fr_lang.h
-- de_lang.h
-- custom_lang.h
+- *en_lang.h*
+- *fr_lang.h*
+- *de_lang.h*
+- *custom_lang.h*
 
 These files define the localized strings and their appropriate variable macro name. This default use of llmsger is less useful since it allows the user to only use one of these files in his/her project.\
 \
