@@ -5,9 +5,11 @@ package process
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 /*
@@ -246,16 +248,34 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	defer f.Close()
 
 	// creation
-	var langValuesDefinitionsText string
+	//var langValuesDefinitionsText string
 	//var langValueListText string = ""
+	var wg sync.WaitGroup
+	results := make(chan string, len(templateInfo.langOptTexts))
 
 	for idx, v := range templateInfo.langOptTexts {
-		langValuesDefinitionsText += fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
-		langValuesDefinitionsText += "{ "
-		for subidx, str := range v {
-			langValuesDefinitionsText += fmt.Sprintf("\"%s\" /*%d*/, ", str, subidx+1)
-		}
-		langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
+		wg.Add(1)
+		go func(idx int, v []string) {
+			defer wg.Done()
+			log.Println("Processing lang option:", idx+1)
+			langValuesDefinitionsText := fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
+			langValuesDefinitionsText += "{ "
+			for subidx, str := range v {
+				langValuesDefinitionsText += fmt.Sprintf("\"%s\" /*%d*/, ", str, subidx+1)
+			}
+			langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
+			results <- langValuesDefinitionsText
+		}(idx, v)
+	}
+
+	wg.Wait()
+	close(results)
+	cnt := 0
+	var langValuesDefinitionsTextComb string = "" //for combining all the results
+	for result := range results {
+		langValuesDefinitionsTextComb += result
+		cnt++
+		log.Println("Done with lang option:", cnt)
 	}
 
 	var varDefinitions string
@@ -271,7 +291,7 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	writeStr := fmt.Sprintf(dynamicSrcText,
 		templateInfo.headName,
 		templateInfo.headguardDefine,
-		langValuesDefinitionsText,
+		langValuesDefinitionsTextComb,
 		templateInfo.varname,
 		strings.ToUpper(templateInfo.baseName),
 		strings.ToUpper(templateInfo.baseName),
