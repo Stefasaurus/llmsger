@@ -5,11 +5,12 @@ package process
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/schollz/progressbar/v3"
 )
 
 /*
@@ -248,16 +249,17 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	defer f.Close()
 
 	// creation
-	//var langValuesDefinitionsText string
-	//var langValueListText string = ""
+
 	var wg sync.WaitGroup
 	results := make(chan string, len(templateInfo.langOptTexts))
+	//fmt.Println("Processing:", templateInfo.srcFilepath)
+	bar := progressbar.Default((int64)(len(templateInfo.langOptTexts)), "Processing langs:")
 
 	for idx, v := range templateInfo.langOptTexts {
 		wg.Add(1)
 		go func(idx int, v []string) {
 			defer wg.Done()
-			log.Println("Processing lang option:", idx+1)
+			//log.Println("Processing lang option:", idx+1)
 			langValuesDefinitionsText := fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
 			langValuesDefinitionsText += "{ "
 			for subidx, str := range v {
@@ -265,17 +267,15 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 			}
 			langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
 			results <- langValuesDefinitionsText
+			bar.Add(1)
 		}(idx, v)
 	}
 
 	wg.Wait()
 	close(results)
-	cnt := 0
 	var langValuesDefinitionsTextComb string = "" //for combining all the results
 	for result := range results {
 		langValuesDefinitionsTextComb += result
-		cnt++
-		log.Println("Done with lang option:", cnt)
 	}
 
 	var varDefinitions string
