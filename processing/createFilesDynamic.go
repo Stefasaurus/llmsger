@@ -253,7 +253,26 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	var wg sync.WaitGroup
 	results := make(chan string, len(templateInfo.langOptTexts))
 	//fmt.Println("Processing:", templateInfo.srcFilepath)
-	bar := progressbar.Default((int64)(len(templateInfo.langOptTexts)), "Processing langs:")
+	bar := progressbar.NewOptions((len(templateInfo.langOptTexts)),
+		progressbar.OptionSetDescription("Processing langs:"),
+		progressbar.OptionSetWriter(os.Stderr),
+		progressbar.OptionShowCount(),
+		progressbar.OptionShowIts(),
+		progressbar.OptionShowElapsedTimeOnFinish(),
+		progressbar.OptionOnCompletion(func() {
+			fmt.Fprint(os.Stderr, "\n")
+		}),
+		progressbar.OptionEnableColorCodes(true),
+		progressbar.OptionSetWidth(15),
+		progressbar.OptionSetRenderBlankState(true),
+		progressbar.OptionSetDescription("[cyan] Processing langs...[reset]"),
+		progressbar.OptionSetTheme(progressbar.Theme{
+			Saucer:        "[green]=[reset]",
+			SaucerHead:    "[green]>[reset]",
+			SaucerPadding: " ",
+			BarStart:      "[",
+			BarEnd:        "]",
+		}))
 
 	for idx, v := range templateInfo.langOptTexts {
 		wg.Add(1)
