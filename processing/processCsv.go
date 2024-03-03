@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func readCsvFile(filePath string) (fields [][]string, err error) {
@@ -100,8 +99,6 @@ func Csv(path string) (langMap map[string][]string, err error) {
 		}
 	}()
 
-	start := time.Now()
-
 	fileExtension := filepath.Ext(path)
 	if fileExtension != ".csv" {
 		err = errors.New("file must be a CSV file (.csv)")
@@ -128,9 +125,6 @@ func Csv(path string) (langMap map[string][]string, err error) {
 	if err != nil {
 		return nil, err
 	}
-
-	elapsed := time.Since(start)
-	log.Printf("process.Csv took %s", elapsed)
 
 	return langMap, err
 }

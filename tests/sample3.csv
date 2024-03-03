@@ -1,6 +1,6 @@
 var,,en lan,fr,german,,,,from,toascii
-GREETINGS,,this is a test for my program,ceci est un test pour mon programme,Dies ist ein Test für mein Programm,,,,ü,52
-exits,,"another test! \""%s\""","encore un essai ! \""%s\""","noch ein Test! \""%s\""",,,,,
+GREETINGS,,"this, is a test for my program",ceci est un test pour mon programme,Dies ist ein Test für mein Programm,,,,ü,52
+exits,,"another test! \""%s\""","encore un essai ! \""%s\""","noch ein Test! \""%s\""",,,,t,51
 TEXT1,,have,avoir,haben,,,,,
 TEXT2,,that,que,Das,,,,,
 TEXT3,,for,pour,für,,,,,

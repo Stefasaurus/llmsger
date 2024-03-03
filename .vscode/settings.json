@@ -1,3 +1,6 @@
 {
-    "go.toolsEnvVars": {}
+    "go.toolsEnvVars": {},
+    "files.associations": {
+        "llmsger.h": "c"
+    }
 }

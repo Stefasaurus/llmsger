@@ -8,6 +8,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
+
+	"github.com/schollz/progressbar/v3"
 )
 
 /*
@@ -246,16 +249,52 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	defer f.Close()
 
 	// creation
-	var langValuesDefinitionsText string
-	//var langValueListText string = ""
+
+	var wg sync.WaitGroup
+	results := make(chan string, len(templateInfo.langOptTexts))
+	//fmt.Println("Processing:", templateInfo.srcFilepath)
+	bar := progressbar.NewOptions((len(templateInfo.langOptTexts)),
+		progressbar.OptionSetDescription("Processing langs:"),
+		progressbar.OptionSetWriter(os.Stderr),
+		progressbar.OptionShowCount(),
+		progressbar.OptionShowIts(),
+		progressbar.OptionShowElapsedTimeOnFinish(),
+		progressbar.OptionOnCompletion(func() {
+			fmt.Fprint(os.Stderr, "\n")
+		}),
+		progressbar.OptionEnableColorCodes(true),
+		progressbar.OptionSetWidth(15),
+		progressbar.OptionSetRenderBlankState(true),
+		progressbar.OptionSetDescription("[cyan] Processing langs...[reset]"),
+		progressbar.OptionSetTheme(progressbar.Theme{
+			Saucer:        "[green]=[reset]",
+			SaucerHead:    "[green]>[reset]",
+			SaucerPadding: " ",
+			BarStart:      "[",
+			BarEnd:        "]",
+		}))
 
 	for idx, v := range templateInfo.langOptTexts {
-		langValuesDefinitionsText += fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
-		langValuesDefinitionsText += "{ "
-		for subidx, str := range v {
-			langValuesDefinitionsText += fmt.Sprintf("\"%s\" /*%d*/, ", str, subidx+1)
-		}
-		langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
+		wg.Add(1)
+		go func(idx int, v []string) {
+			defer wg.Done()
+			//log.Println("Processing lang option:", idx+1)
+			langValuesDefinitionsText := fmt.Sprintf("#define %s_TEXTS_LLMSGR ", templateInfo.langOptEnums[idx])
+			langValuesDefinitionsText += "{ "
+			for subidx, str := range v {
+				langValuesDefinitionsText += fmt.Sprintf("\"%s\" /*%d*/, ", str, subidx+1)
+			}
+			langValuesDefinitionsText = langValuesDefinitionsText + "}\n\n"
+			results <- langValuesDefinitionsText
+			bar.Add(1)
+		}(idx, v)
+	}
+
+	wg.Wait()
+	close(results)
+	var langValuesDefinitionsTextComb string = "" //for combining all the results
+	for result := range results {
+		langValuesDefinitionsTextComb += result
 	}
 
 	var varDefinitions string
@@ -271,7 +310,7 @@ func createSrc(langMap map[string][]string, templateInfo *templateInfo_t) (err e
 	writeStr := fmt.Sprintf(dynamicSrcText,
 		templateInfo.headName,
 		templateInfo.headguardDefine,
-		langValuesDefinitionsText,
+		langValuesDefinitionsTextComb,
 		templateInfo.varname,
 		strings.ToUpper(templateInfo.baseName),
 		strings.ToUpper(templateInfo.baseName),

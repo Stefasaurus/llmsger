@@ -22,6 +22,7 @@ func ReplaceFields(langMap map[string][]string) (err error) {
 	toasciiField, toasciiOk := langMap["toascii"]
 
 	if !fromOk && !toasciiOk {
+		err = fmt.Errorf("the \"from\" or \"toascii\" fields not defined but replace option used")
 		return err
 	} else if fromOk != toasciiOk {
 		err = fmt.Errorf("either \"from\" or \"toascii\" has been used while the other was not defined as a main column name")
@@ -68,9 +69,9 @@ func ReplaceFields(langMap map[string][]string) (err error) {
 		if k == "var" {
 			continue
 		}
-		for idx, text := range v {
+		for idx := range v {
 			for _, replacement := range replacements {
-				v[idx] = strings.ReplaceAll(text, replacement.original, string(rune(replacement.replacementCode)))
+				v[idx] = strings.ReplaceAll(v[idx], replacement.original, string(rune(replacement.replacementCode)))
 			}
 		}
 	}

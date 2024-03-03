@@ -8,13 +8,29 @@
   <a href="https://github.com/Stefasaurus/llmsger" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/GitHub-Source-success" alt="View project on GitHub" /></a>&nbsp;
 </p>
 
+## Table of Contents
+
+
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+  - [Features](#features)
+- [Clone the project](#clone-the-project)
+- [Install dependencies and setup](#install-dependencies-and-setup)
+- [Basic usage](#basic-usage)
+- [Advanced usage](#advanced-usage)
+- [Using the UTF-8 to ASCII code replacer](#using-the-utf-8-to-ascii-code-replacer)
+- [Contributing](#contributing)
+- [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
+- [License](#license)
+
+
 ## Overview
 
 This CLI tool allows you to generate files recquired for the localization of strings in a
 project (currently only C projects), all from a CSV file. 
 
 
-### Features include:
+### Features
 
 - Creation of C files for the purpose of localization
 - Merging localization files
@@ -23,19 +39,6 @@ project (currently only C projects), all from a CSV file.
 - Ability to replace all user defined UTF-8 characters with ASCII codes
 
 
-## Table of Contents
-
-- [Overview](#overview)
-  - [Features include:](#features-include)
-- [Table of Contents](#table-of-contents)
-- [Clone the project](#clone-the-project)
-- [Install dependencies](#install-dependencies)
-- [Basic usage](#basic-usage)
-- [Advanced usage](#advanced-usage)
-- [Using the UTF-8 to ASCII code replacer](#using-the-utf-8-to-ascii-code-replacer)
-- [Contributing](#contributing)
-- [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
-- [License](#license)
 
 ## Clone the project
 
@@ -43,7 +46,7 @@ project (currently only C projects), all from a CSV file.
 git clone https://github.com/Stefasaurus/llmsger.git
 ```
 
-## Install dependencies
+## Install dependencies and setup
 
 To be able to buld the project, you must install [Go](https://go.dev/doc/install).\
 Then using *make*, run the following in the directory of the Makefile:
@@ -52,7 +55,12 @@ make
 ```
 For windows, it is recommended to run make using git bash.\
 \
-Note: in the "*bulds/*" directory there is a makefile that builds the project for multiple operating systems. 
+Note: in the "*builds/*" directory there is a makefile that builds the project for multiple operating systems. \
+\
+If you do not have *make* installed, then you can also use the following command while in the directory for llmsger:
+```bash
+go build -ldflags "-X go.szostok.io/version.version=$(shell git describe --tags)" llmsger.go
+```
 
 ## Basic usage
 
@@ -151,7 +159,31 @@ Please feel free to make as many localization strings as you would like!
 \
 Other helpful information can be seen when running the *help* command.
 ## Using the UTF-8 to ASCII code replacer
-Todo but implemented
+In some situations, the user cannot use UTF-8 characters in his/her application.\
+This would usually be handled by either replacing the special character with an ASCII equivalent (i.e. 'ü' with 'u'), or by replacing the special character with an ASCII code that usually is not printed out (i.e. codes that go past 127) and then handling the special code in runtime.\
+For these reasons, you can set an option in llmsger to perform these replacements.\
+To do this you have to:
+- Declare the fields "from" and "toascii" in the first row
+- Write the character in the "from" column which will be replaced by an ASCII code in the "toascii" column
+- Run llmsger as usual but also set the '-r' flag
+  
+An example of this table would be:
+
+| var       |   | en                             | fr                                  | german                              |   |   | from | toascii |
+|-----------|---|--------------------------------|-------------------------------------|-------------------------------------|---|---|------|---------|
+| EXAMPLE_1 |   | this, is a test for my program | ceci est un test pour mon programme | Dies ist ein Test für mein Programm |   |   | ü    | 52      |
+| EXAMPLE_2 |   | another test! \"%s\"           | encore un essai ! \"%s\"            | noch ein Test! \"%s\"               |   |   |      |         |
+
+Then running llmsger (i.e. with the dyngen and '-r') commands, the 'ü' will be replaced by '4' (ASCII code 52) in the generated file.\
+You can define many other characters to replace by adding more fields:
+
+| var       |   | en                             | fr                                  | german                              |   |   | from | toascii |
+|-----------|---|--------------------------------|-------------------------------------|-------------------------------------|---|---|------|---------|
+| EXAMPLE_1 |   | this, is a test for my program | ceci est un test pour mon programme | Dies ist ein Test für mein Programm |   |   | ü    | 52      |
+| EXAMPLE_2 |   | another test! \"%s\"           | encore un essai ! \"%s\"            | noch ein Test! \"%s\"               |   |   | t    | 51      |
+
+The example above also replaces all 't' characters with the character '3'.\
+These replacement fields affect <span style="color:red">*all*</span> the language strings.
 
 ## Contributing
 
